@@ -5,4 +5,63 @@
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+<h2>Редактировать продукт</h2>
+
+<form asp-action="Edit" enctype="multipart/form-data">
+    @Html.ValidationSummary(true)
+    <input type="hidden" asp-for="Id"/>
+    <input type="hidden" asp-for="Avatar"/>
+    <input type="hidden" asp-for="DateOfCreation"/>
+    <input type="hidden" asp-for="CategoryId"/>
+    <input type="hidden" asp-for="BrandId"/>
+    <input type="hidden" asp-for="ImageFile" name="ImageFile" accept="image/*"/>
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control"/>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Price"></label>
+        <input asp-for="Price" class="form-control"/>
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control"/>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="CategoryId">Категория</label>
+        <select asp-for="CategoryId" class="form-control">
+            <option value="">-- Выберите категорию --</option>
+            @foreach (var category in ViewBag.Categories)
+            {
+                <option value="@category.Id">@category.NameOfCategory</option>
+            }
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="BrandId">Бренд</label>
+        <select asp-for="BrandId" class="form-control">
+            <option value="">-- Выберите бренд --</option>
+            @foreach (var brand in ViewBag.Brands)
+            {
+                <option value="@brand.Id">@brand.NameOfBrand</option>
+            }
+        </select>
+        <span asp-validation-for="BrandId" class="text-danger"></span>
+    </div>
+    
+    
+    <div class="form-group">
+                        <label asp-for="ImageFile">Изображение</label>
+                        <input asp-for="ImageFile" type="file" name="ImageFile" class="form-control">
+                        <span asp-validation-for="ImageFile" class="text-danger"></span>
+                    </div>
+    <button type="submit" class="btn btn-primary mt-2">Подтвердить</button>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

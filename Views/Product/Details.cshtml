@@ -1,8 +1,32 @@
 @model Product
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Details of Product";
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+<h2>@Model.Name Details</h2>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <img class="img-fluid" src="@Model.Avatar" alt="@Model.Name Avatar">
+        </div>
+        <div class="col-md-8">
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Id:</strong> @Model.Id</li>
+                <li class="list-group-item"><strong>Name:</strong> @Model.Name</li>
+                <li class="list-group-item"><strong>Price:</strong> @Model.Price</li>
+                <li class="list-group-item"><strong>Description:</strong> @Model.Description</li>
+                <li class="list-group-item"><strong>Date of Creation:</strong> @Model.DateOfCreation</li>
+                @if (Model.DateOfEditing != null)
+                {
+                    <li class="list-group-item"><strong>Date of Editing:</strong> @Model.DateOfEditing</li>
+                }
+                <li class="list-group-item"><strong>Category:</strong> @Model.Category.NameOfCategory</li>
+                <li class="list-group-item"><strong>Brand:</strong> @Model.Brand.NameOfBrand</li>
+            </ul>
+            <a href="@Url.Action("Edit", "Product", new { id = Model.Id })" class="btn btn-primary mt-3">Редактировать</a>
+        </div>
+    </div>
+</div>
