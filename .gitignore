@@ -1,0 +1,11 @@
+[Bb]in/
+[Oo]bj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+.git 
+.idea
+[Dd]ebug
+.db
+.db-shm
+.db-wal
