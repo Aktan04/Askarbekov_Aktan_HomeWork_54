@@ -65,7 +65,7 @@ public class CategoryController : Controller
         {
             _context.Update(category);
             _context.SaveChanges();
-            return RedirectToAction("Index", "Brand");
+            return RedirectToAction("Index", "Category");
         }
         return View(category);
     }

@@ -2,8 +2,7 @@
 [Oo]bj/
 /packages/
 riderModule.iml
-/_ReSharper.Caches/
-.git 
+/_ReSharper.Caches/ 
 .idea
 [Dd]ebug
 .db
