@@ -1,8 +1,67 @@
 @model Product
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Create Product";
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+<h2>Заполните форму для добавления продукта</h2>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                @Html.ValidationSummary(true)
+                <div class="form-group">
+                    <label for="Name">Наименование</label>
+                    <input asp-for="Name" class="form-control" placeholder="Введите наименование">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="Price">Цена</label>
+                    <input asp-for="Price" class="form-control" placeholder="Введите цену">
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="Description">Описание (По желанию)</label>
+                    <input asp-for="Description" class="form-control" placeholder="Введите описание">
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ImageFile">Изображение</label>
+                    <input asp-for="ImageFile" type="file" name="ImageFile" class="form-control">
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="CategoryId">Категория</label>
+                    <select asp-for="CategoryId" class="form-control">
+                        <option value="">-- Выберите категорию --</option>
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.Id">@category.NameOfCategory</option>
+                        }
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="BrandId">Бренд</label>
+                    <select asp-for="BrandId" class="form-control">
+                        <option value="">-- Выберите бренд --</option>
+                        @foreach (var brand in ViewBag.Brands)
+                        {
+                            <option value="@brand.Id">@brand.NameOfBrand</option>
+                        }
+                    </select>
+                    <span asp-validation-for="BrandId" class="text-danger"></span>
+                </div>
+                
+                <button type="submit" class="btn btn-primary mt-2">Создать</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

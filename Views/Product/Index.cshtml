@@ -1,8 +1,93 @@
 @model List<Product>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Products";
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+<div class="container listOfProducts">
+    <div class="authors my-5">
+        <h1>Все продукты</h1>
+    </div>
+    
+    <form asp-action="Index" method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-4 mb-2">
+                <label for="categoryId" class="form-label">Категория:</label>
+                <select id="categoryId" name="categoryId" class="form-select">
+                    <option value="">Все категории</option>
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <option value="@category.Id">@category.NameOfCategory</option>
+                    }
+                </select>
+            </div>
+    
+            <div class="col-md-4 mb-2">
+                <label for="brandId" class="form-label">Бренд:</label>
+                <select id="brandId" name="brandId" class="form-select">
+                    <option value="">Все бренды</option>
+                    @foreach (var brand in ViewBag.Brands)
+                    {
+                        <option value="@brand.Id">@brand.NameOfBrand</option>
+                    }
+                </select>
+            </div>
+    
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary my-2">Применить фильтр</button>
+            </div>
+        </div>
+    </form>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+        <div><a asp-action="Index" asp-route-sortState="@ViewBag.NameSort">По названию</a></div>
+        <div><a asp-action="Index" asp-route-sortState="@ViewBag.PriceSort">По цене</a></div>
+        <div><a asp-action="Index" asp-route-sortState="@ViewBag.DateSort">По дате добавления</a></div>
+        <div><a asp-action="Index" asp-route-sortState="@ViewBag.CategorySort">По категории</a></div>
+        <div><a asp-action="Index" asp-route-sortState="@ViewBag.BrandSort">По бренду</a></div>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+        @if (@Model.Count == 0)
+        {
+            <p>Продукты еще не добавлены</p>
+        }
+        else
+        {
+            @foreach (var product in @Model)
+            {
+                <div class="col">
+                    <div class="box d-flex flex-column">
+
+                        <div class="box-photo">
+                            <div class="photo">
+                                <img src="@product.Avatar" alt="@product.Name">
+                            </div>
+                        </div>
+
+                        <div class="boxName">
+                            <h6 class="name">@product.Name</h6>
+                            <span>
+                                <p>Цена: @product.Price</p>
+                                <p>Дата создания: @product.DateOfCreation</p>
+                                <p>Категория: @product.Category.NameOfCategory</p>
+                                <p>Бренд: @product.Brand.NameOfBrand</p>
+                            </span>
+                        </div>
+
+                        <div class="box-url mt-auto">
+                            <a asp-action="Create" asp-controller="Order" asp-route-Id="@product.Id" class="btn btn-link bg-warning bg-opacity-75 rounded-0 text-dark">
+                                Заказать
+                            </a>
+                            <a asp-action="Details" asp-controller="Product" asp-route-Id="@product.Id" class="btn btn-link bg-warning bg-opacity-75 rounded-0 text-dark">
+                                Детали
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    
+    <a asp-action="Create" asp-controller="Product" class="add-product-button">Добавить продукт</a>
+</div>
