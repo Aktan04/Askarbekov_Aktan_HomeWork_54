@@ -125,4 +125,63 @@ public class ProductController : Controller
         }
         return View(product);
     }
+    
+    public IActionResult Details(int id)
+    {
+        List<Product> products = _context.Products.Include(p => p.Category).ToList();
+        products = _context.Products.Include(p => p.Brand).ToList();
+        var product = products.FirstOrDefault(p => p.Id == id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        return View(product);
+    }
+    
+    public IActionResult Edit(int id)
+    {
+        ViewBag.Categories = _context.Categories.ToList();
+        ViewBag.Brands = _context.Brands.ToList();
+        var product = _context.Products.Find(id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+        return View(product);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(Product product, int id)
+    {
+        if (_context.Products.Any(p => p.Name == product.Name && p.Id != id))
+        {
+            ModelState.AddModelError("Name", "Продукт с таким название уже существует!");
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Brands = _context.Brands.ToList();
+            return View(product);
+        }
+        if (ModelState.IsValid)
+        {
+            if (product.ImageFile != null && product.ImageFile.Length > 0)
+            {
+                
+                var uploadPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(product.ImageFile.FileName);
+                var fullPath = Path.Combine(uploadPath, fileName);
+            
+                using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await product.ImageFile.CopyToAsync(fileStream);
+                }
+            
+                product.Avatar = "/images/" + fileName;
+            }
+            product.DateOfEditing = DateTime.Now;
+            _context.Update(product);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        return View(product);
+    }
 }
