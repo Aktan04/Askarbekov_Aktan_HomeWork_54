@@ -1,8 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using SecondProductShop.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
+builder.Services.AddDbContext<ProductContext>(options => options.UseSqlite(connection));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
