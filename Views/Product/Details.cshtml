@@ -27,6 +27,7 @@
                 <li class="list-group-item"><strong>Brand:</strong> @Model.Brand.NameOfBrand</li>
             </ul>
             <a href="@Url.Action("Edit", "Product", new { id = Model.Id })" class="btn btn-primary mt-3">Редактировать</a>
+            <a href="@Url.Action("Delete", "Product", new { id = Model.Id })" class="btn btn-primary mt-3">Удалить</a>
         </div>
     </div>
 </div>

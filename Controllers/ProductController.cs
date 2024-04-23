@@ -184,4 +184,33 @@ public class ProductController : Controller
         }
         return View(product);
     }
+    
+    public IActionResult Delete(int? id)
+    {
+        if (id != null)
+        {
+            Product product = _context.Products.FirstOrDefault(p => p.Id == id);
+            if (product != null)
+            {
+                return View(product);
+            }
+        }
+        return NotFound();
+    }
+    
+    [HttpPost]
+    public IActionResult ConfirmDelete(int? id)
+    {
+        if (id != null)
+        {
+            Product product = _context.Products.FirstOrDefault(p => p.Id == id);
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+        }
+        return NotFound();
+    }
 }
