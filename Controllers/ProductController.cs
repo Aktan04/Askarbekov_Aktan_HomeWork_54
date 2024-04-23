@@ -75,4 +75,54 @@ public class ProductController : Controller
 
         return View(products);
     }
+    
+    public IActionResult Create()
+    {
+        ViewBag.Categories = _context.Categories.ToList();
+        ViewBag.Brands = _context.Brands.ToList();
+        return View();
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> Create(Product product)
+    {
+        if (_context.Products.Any(p => p.Name == product.Name))
+        {
+            ModelState.AddModelError("Name", "Продукт с таким название уже существует!");
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Brands = _context.Brands.ToList();
+            return View(product);
+        }
+        if (product.ImageFile == null)
+        {
+            ModelState.AddModelError("ImageFile", "Картинка обязательна для скачивания");
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Brands = _context.Brands.ToList();
+            return View(product);
+        }
+        
+        if (ModelState.IsValid)
+        {
+            if (product.ImageFile != null && product.ImageFile.Length > 0)
+            {
+                
+                var uploadPath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(product.ImageFile.FileName);
+                var fullPath = Path.Combine(uploadPath, fileName);
+            
+                using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await product.ImageFile.CopyToAsync(fileStream);
+                }
+            
+                product.Avatar = "/images/" + fileName;
+            }
+            
+            product.DateOfCreation = DateTime.Now;
+            _context.Add(product);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+        return View(product);
+    }
 }
